@@ -1,0 +1,11 @@
+[
+  {"id":"gem_atk_1","name":"碎裂攻击宝石","type":"atk","value":50},
+  {"id":"gem_atk_2","name":"锋利攻击宝石","type":"atk","value":100},
+  {"id":"gem_atk_3","name":"璀璨攻击宝石","type":"atk","value":200},
+  {"id":"gem_def_1","name":"碎裂防御宝石","type":"def","value":30},
+  {"id":"gem_def_2","name":"坚固防御宝石","type":"def","value":60},
+  {"id":"gem_def_3","name":"璀璨防御宝石","type":"def","value":120},
+  {"id":"gem_hp_1","name":"碎裂生命宝石","type":"hp","value":200},
+  {"id":"gem_hp_2","name":"健壮生命宝石","type":"hp","value":400},
+  {"id":"gem_hp_3","name":"璀璨生命宝石","type":"hp","value":800}
+]

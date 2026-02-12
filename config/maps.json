@@ -1,0 +1,5 @@
+[
+  {"id":1,"name":"幽暗森林","monsters":[{"name":"哥布林","hp":300,"atk":40,"dropEquipIds":["weapon_001"]}]},
+  {"id":2,"name":"烈焰神殿","monsters":[{"name":"火焰守卫","hp":800,"atk":90,"dropEquipIds":["armor_001"]}]},
+  {"id":3,"name":"神之领域","monsters":[{"name":"创世龙神","hp":3000,"atk":300,"dropEquipIds":["artifact_001"]}]}
+]

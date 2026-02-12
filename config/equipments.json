@@ -1,0 +1,5 @@
+[
+  {"id":"weapon_001","name":"炎魔之刃","type":"武器","quality":"史诗","setId":"flame_01","maxEnhance":15,"gemSlots":2,"atk":120,"def":20,"hp":0,"crit":15},
+  {"id":"armor_001","name":"黑龙铠甲","type":"防具","quality":"史诗","setId":"flame_01","maxEnhance":15,"gemSlots":2,"atk":30,"def":150,"hp":200,"crit":5},
+  {"id":"artifact_001","name":"创世神石","type":"神器","quality":"神话","setId":"god_01","maxEnhance":20,"gemSlots":3,"atk":300,"def":200,"hp":500,"crit":40}
+]

@@ -1,0 +1,14 @@
+{
+  "packages": [
+    {"id":"pkg_01","name":"新手礼包","desc":"开局起飞","price":6,"diamond":100,"items":[{"type":"gold","value":5000},{"type":"enhance_stone","count":10},{"type":"gem","id":"gem_atk_1","count":2},{"type":"gem","id":"gem_hp_1","count":2}]},
+    {"id":"pkg_02","name":"进阶礼包","desc":"强化必备","price":30,"diamond":500,"items":[{"type":"gold","value":20000},{"type":"enhance_stone","count":30},{"type":"gem","id":"gem_atk_2","count":5},{"type":"gem","id":"gem_def_2","count":5}]},
+    {"id":"pkg_03","name":"战神礼包","desc":"顶级战力","price":98,"diamond":2000,"items":[{"type":"gold","value":100000},{"type":"enhance_stone","count":100},{"type":"gem","id":"gem_atk_3","count":10},{"type":"gem","id":"gem_def_3","count":10},{"type":"gem","id":"gem_hp_3","count":10}]}
+  ],
+  "items": [
+    {"id":"item_gold","name":"金币袋","desc":"10000 金币","price":10,"reward":{"type":"gold","value":10000}},
+    {"id":"item_enhance","name":"强化石×10","desc":"装备强化","price":2,"reward":{"type":"enhance_stone","count":10}},
+    {"id":"item_atk1","name":"攻击宝石I","price":5,"reward":{"type":"gem","id":"gem_atk_1","count":1}},
+    {"id":"item_def1","name":"防御宝石I","price":5,"reward":{"type":"gem","id":"gem_def_1","count":1}},
+    {"id":"item_hp1","name":"生命宝石I","price":5,"reward":{"type":"gem","id":"gem_hp_1","count":1}}
+  ]
+}
