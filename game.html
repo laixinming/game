@@ -26,10 +26,10 @@ button{padding:8px 12px;border-radius:6px;background:#223;color:#00f0ff;border:1
     <div class="page">
       <div class="title">暗黑割草战神</div>
       <div class="bar">
-        <button id="connect">🔗 绑定钱包</button>
-        <button onclick="game.render.combat()">⚔️ 去战斗</button>
-        <button onclick="game.render.marketPage()">🛒 集市</button>
-        <button id="save" class="orange">💾 存档</button>
+        <button id="btn_connect">🔗 绑定钱包</button>
+        <button id="btn_fight">⚔️ 去战斗</button>
+        <button id="btn_market">🛒 集市</button>
+        <button id="btn_save" class="orange">💾 存档</button>
       </div>
       <div class="panel">
         <p>攻击：<span id="atk">150</span></p>
@@ -47,5 +47,6 @@ button{padding:8px 12px;border-radius:6px;background:#223;color:#00f0ff;border:1
 </div>
 
 <input type="file" id="fileInput" accept=".txt">
-<!-- 绝对路径，保证Vercel加载 -->
-<script type="module" src="/app.js"></script>
+
+<!-- 关键：去掉 type="module"，Vercel 100%加载 -->
+<script src="/app.js"></script>
