@@ -1,32 +1,24 @@
-import { Render } from "./ui/Render.js";
-import { web3eth } from "./core/Web3.js";
-import { erc721 } from "./core/ERC721.js";
-import { nft } from "./core/NFT.js";
-import { market } from "./core/Market.js";
-import { economy } from "./core/Economy.js";
-import { diamond } from "./core/Diamond.js";
-import { player } from "./core/Player.js";
-import { combat } from "./core/Combat.js";
-import { enhance } from "./core/Enhance.js";
-import { gem } from "./core/Gem.js";
-import { shop } from "./core/Shop.js";
-import { bag } from "./core/Bag.js";
-import { save } from "./core/Save.js";
-import { pay } from "./core/Pay.js";
+// 先保证按钮能点！！！
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('JS 加载成功！');
 
-// 强制挂载到 window，保证按钮能调用
-window.game = {
-  web3eth, erc721, nft, market, economy, diamond,
-  player, combat, enhance, gem, shop, bag, save, pay,
-  render: Render
-};
+  // 绑定钱包
+  document.getElementById('btn_connect').onclick = function() {
+    alert('✅ 绑定钱包按钮点击成功！');
+  };
 
-// 强制初始化
-window.onload = function() {
-  try {
-    Render.init();
-  } catch(e) {
-    console.error("启动错误", e);
-    alert("游戏加载完成！");
-  }
-};
+  // 去战斗
+  document.getElementById('btn_fight').onclick = function() {
+    alert('✅ 去战斗按钮点击成功！');
+  };
+
+  // 集市
+  document.getElementById('btn_market').onclick = function() {
+    alert('✅ 集市按钮点击成功！');
+  };
+
+  // 存档
+  document.getElementById('btn_save').onclick = function() {
+    alert('✅ 存档按钮点击成功！');
+  };
+});
