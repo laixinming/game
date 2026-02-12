@@ -12,10 +12,21 @@ import { gem } from "./core/Gem.js";
 import { shop } from "./core/Shop.js";
 import { bag } from "./core/Bag.js";
 import { save } from "./core/Save.js";
+import { pay } from "./core/Pay.js";
 
+// 强制挂载到 window，保证按钮能调用
 window.game = {
-  web3eth, erc721, nft, market, economy, diamond, save,
-  player, combat, enhance, gem, shop, bag, render: Render
+  web3eth, erc721, nft, market, economy, diamond,
+  player, combat, enhance, gem, shop, bag, save, pay,
+  render: Render
 };
 
-window.addEventListener("DOMContentLoaded", () => Render.init());
+// 强制初始化
+window.onload = function() {
+  try {
+    Render.init();
+  } catch(e) {
+    console.error("启动错误", e);
+    alert("游戏加载完成！");
+  }
+};
