@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>暗黑割草战神</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -15,35 +15,37 @@ body{background:#0b0b16;color:#e0e0e0;padding:20px;font-family:sans-serif}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
 .card{background:#121225;border:2px solid #445;border-radius:12px;padding:16px}
 button{padding:8px 12px;border-radius:6px;background:#223;color:#00f0ff;border:1px solid #00f0ff;cursor:pointer}
-.orange{background:#ff8800;color:#000;border:0}
+.orange{background:#ff8000;color:#000;border:0}
 .empty{text-align:center;color:#888;margin:40px 0}
+.slot{border:1px solid #445;padding:10px;margin:8px 0;border-radius:8px}
 #fileInput{display:none}
 </style>
 
 <div id="main">
-  <div class="page">
-    <div class="title">暗黑割草战神</div>
-    <div class="bar">
-      <button id="connect">🔗 连接钱包（登录）</button>
-      <button onclick="game.render.combat()">⚔️ 去战斗</button>
-      <button onclick="game.render.marketPage()">🛒 集市</button>
-      <button id="save" class="orange">💾 存档</button>
-    </div>
-
-    <div class="panel">
-      <p>攻击：<span id="atk">0</span></p>
-      <p>防御：<span id="def">0</span></p>
-      <p>生命：<span id="hp">0</span></p>
-      <p>暴击：<span id="crit">0</span>%</p>
-      <p>金币：<span id="gold">0</span></p>
-      <p>钻石：<span id="diamond">0</span></p>
-    </div>
-
-    <div id="nftlist" class="grid">
-      <div class="empty">请连接钱包，开始游戏</div>
+  <div id="home_html">
+    <div class="page">
+      <div class="title">暗黑割草战神</div>
+      <div class="bar">
+        <button id="connect">🔗 绑定钱包</button>
+        <button onclick="game.render.combat()">⚔️ 去战斗</button>
+        <button onclick="game.render.marketPage()">🛒 集市</button>
+        <button id="save" class="orange">💾 存档</button>
+      </div>
+      <div class="panel">
+        <p>攻击：<span id="atk">150</span></p>
+        <p>防御：<span id="def">80</span></p>
+        <p>生命：<span id="hp">1500</span></p>
+        <p>暴击：<span id="crit">5</span>%</p>
+        <p>金币：<span id="gold">1000</span></p>
+        <p>钻石：<span id="diamond">100</span></p>
+      </div>
+      <div id="nftlist" class="grid">
+        <div class="empty">点击【去战斗】开始玩</div>
+      </div>
     </div>
   </div>
 </div>
 
 <input type="file" id="fileInput" accept=".txt">
+<!-- 绝对路径，保证Vercel加载 -->
 <script type="module" src="/app.js"></script>
