@@ -144,9 +144,12 @@ export class Render {
   }
 
   static bind(){
-    $("#connect").onclick=debounce(async()=>{
-      await web3eth.connect(); Render.refresh(); alert("连接成功");
-    });
+    // ========== 修复：连接钱包 = 可选绑定，不是登录 ==========
+    $("#connect").onclick = async function(){
+      await web3eth.connect();
+      Render.refresh();
+    };
+
     $("#save").onclick=debounce(async()=>{
       const o=prompt("1=导出 2=导入","1");
       o==="1"&&await save.export();
@@ -161,3 +164,4 @@ export class Render {
 }
 
 window.$=s=>document.querySelector(s);
+
