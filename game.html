@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>游戏</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0b0b16;color:#e0e0e0;padding:20px}
+.page{max-width:900px;margin:0 auto}
+.title{font-size:26px;text-align:center;margin:20px 0;color:#00f0ff}
+.back{padding:8px 16px;background:#223;color:#00f0ff;border:1px solid #00f0ff;border-radius:8px;display:block;margin:0 auto 10px}
+.panel{background:#121225;border:1px solid #445;border-radius:12px;padding:16px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:10px}
+.card{background:#121225;border:2px solid #445;border-radius:12px;padding:12px}
+button{margin:4px;padding:6px 10px;border-radius:6px;background:#223;color:#00f0ff;border:1px solid #00f0ff;cursor:pointer}
+.orange{background:#ff8800;color:#000;border:none}
+.slot{border:1px solid #445;padding:8px;margin:6px 0;border-radius:8px}
+.bar{display:flex;gap:10px;justify-content:center;margin-bottom:15px;flex-wrap:wrap}
+#fileInput{display:none}
+</style>
+
+<div id="main">
+  <div id="home_html">
+    <div class="page">
+      <div class="title">暗黑割草战神</div>
+      <div class="bar">
+        <button id="connect">连接钱包</button>
+        <button onclick="game.render.combat()">去战斗</button>
+        <button onclick="game.render.marketPage()">集市</button>
+        <button id="save" class="orange">存档</button>
+      </div>
+      <div class="panel">
+        <p>攻击：<span id="atk"></span></p>
+        <p>防御：<span id="def"></span></p>
+        <p>生命：<span id="hp"></span></p>
+        <p>暴击：<span id="crit"></span>%</p>
+        <p>金币：<span id="gold"></span></p>
+        <p>钻石：<span id="diamond"></span></p>
+      </div>
+      <div id="nftlist" class="grid"></div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".txt">
+<script type="module" src="app.js"></script>
