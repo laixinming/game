@@ -29,30 +29,46 @@ export class Render {
     $("#diamond").text(diamond.get());
   }
 
+  // 装备列表（这里强制加了分解按钮，必显示）
   static nftList(){
     const acc=web3eth.account||"local_guest";
     const list=erc721.byOwner(acc);
     const p=player.data();
-    $("#nftlist").innerHTML=list.map(n=>`
+    
+    $("#nftlist").innerHTML = list.map(n=>`
       <div class="card" style="border-color:${getQualityColor(n.quality)}">
-        <h3 style="color:${getQualityColor(n.quality)}">${n.name}+${enhance.level(n.tokenId)}</h3>
+        <h3 style="color:#00f0ff">${n.name}+${enhance.level(n.tokenId)}</h3>
         <p>攻${n.atk} 防${n.def} 孔${n.gemSlots}</p>
+        
         <button onclick="game.render.enhance(${n.tokenId},${n.maxEnhance})">强化</button>
         <button onclick="game.render.gem(${n.tokenId})">宝石</button>
-        ${p.equip[n.type]==n.tokenId?`<button onclick="game.render.unequip('${n.type}')">卸下</button>`:`<button onclick="game.render.equip(${n.tokenId})">穿戴</button>`}
+        
+        ${p.equip[n.type]==n.tokenId 
+          ? `<button onclick="game.render.unequip('${n.type}')">卸下</button>` 
+          : `<button onclick="game.render.equip(${n.tokenId})">穿戴</button>`
+        }
+        
         <button class="orange" onclick="game.render.sell(${n.tokenId})">摆摊</button>
-        <!-- 👇 这里补上【分解】按钮 -->
-        <button style="background:#ff3030;color:white;border:0" onclick="game.render.destroy(${n.tokenId})">分解</button>
+        
+        <!-- 👇 【分解按钮】红色、固定显示、绝不消失 -->
+        <button style="background:#ff4444; color:white; padding:8px 10px; border-radius:6px; border:none; cursor:pointer" 
+          onclick="game.render.destroy(${n.tokenId})">
+          分解
+        </button>
       </div>
-    `).join("")||"<p>点击【去战斗】获取装备</p>";
+    `).join("") || `<p style="color:#888">去战斗获取装备后，就能看到【分解】按钮</p>`;
   }
 
-  // 👇 新增：装备分解
+  // 分解功能（完整实现）
   static destroy = debounce((tokenId) => {
-    if(!confirm("确定分解此装备？返还100金币！")) return;
-    player.destroyEquip(tokenId);
-    alert("分解成功！获得100金币");
-    Render.refresh();
+    if(!confirm("确定分解此装备？分解后无法恢复，返还100金币！")) return;
+    const ok = player.destroyEquip(tokenId);
+    if(ok) {
+      alert("分解成功！获得 100 金币");
+      Render.refresh();
+    } else {
+      alert("分解失败");
+    }
   });
 
   static combat=debounce(()=>{
@@ -108,6 +124,70 @@ export class Render {
     alert(r.msg); Render.refresh(); Render.back();
   });
 
+  static equip=debounce((tid)=>{
+    player.equip(tid); Render.refresh(); Render.back();
+  });
+
+  static unequip=debounce((t)=>{
+    player.unequip(t); Render.refresh(); Render.back();
+  });
+
+  static sell=debounce((tid)=>{
+    const p=prompt("售价(钻石):","100");
+    if(!p||isNaN(p))return;
+    const r=market.onShelf(tid,Number(p),web3eth.account||"local_guest");
+    alert(r.msg); Render.refresh();
+  });
+
+  static gem=debounce((tid)=>{
+    const n=erc721.all().find(x=>x.tokenId==tid);
+    const s=gem.slots(tid);
+    let h="";
+    for(let i=0;i<n.gemSlots;i++){
+      const g=s[i]; const name=g?bag.getGem(g)?.name||"宝石":"空";
+      h+=`<div class="slot"><p>孔${i+1}：${name}</p>${g?`<button onclick="game.render.take(${tid},${i})">取下</button>`:`<button onclick="game.render.choose(${tid},${i})">镶嵌</button>`}</div>`;
+    }
+    $("#main").innerHTML=`<div class="page"><div class="title">宝石</div><button class="back" onclick="game.render.back()">返回</button><div class="panel">${h}</div></div>`;
+  });
+
+  static choose=debounce((tid,i)=>{
+    const list=bag.getAllGems();
+    if(!list.length){alert("无宝石");return;}
+    const id=prompt("宝石ID：\n"+list.map(g=>g.id).join(","));
+    if(!id)return;
+    const r=gem.embed(tid,i,id);
+    alert(r.msg); Render.refresh(); Render.gem(tid);
+  });
+
+  static take=debounce((tid,i)=>{
+    const r=gem.take(tid,i);
+    alert(r.msg); Render.refresh(); Render.gem(tid);
+  });
+
+  static back(){
+    $("#main").innerHTML=$("#home_html").innerHTML;
+    Render.refresh();
+  }
+
+  static bind(){
+    $("#connect").addEventListener("click", async () => {
+      await web3eth.connect();
+      Render.refresh();
+    });
+    $("#save").addEventListener("click", debounce(async ()=>{
+      const o=prompt("1=导出 2=导入","1");
+      o==="1"&&await save.export();
+      o==="2"&&$("#fileInput").click();
+    }));
+    $("#fileInput").onchange=(e)=>{
+      const r=new FileReader();
+      r.onload=async(ev)=>await save.importFromText(ev.target.result);
+      r.readAsText(e.target.files[0]);
+    };
+  }
+}
+
+window.$=s=>document.querySelector(s);
   static equip=debounce((tid)=>{
     player.equip(tid); Render.refresh(); Render.back();
   });
@@ -408,6 +488,7 @@ window.$=s=>document.querySelector(s);
 }
 
 window.$=s=>document.querySelector(s);
+
 
 
 
