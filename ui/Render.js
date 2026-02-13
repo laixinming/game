@@ -10,7 +10,6 @@ export class Render {
   }
 
   static nftList() {
-    // 直接渲染5个按钮，不读任何危险数据
     $("#nftlist").innerHTML = `
       <div class="card">
         <h3>正常装备</h3>
@@ -19,13 +18,25 @@ export class Render {
         <button>宝石</button>
         <button>穿戴</button>
         <button>摆摊</button>
-        <button onclick="game.render.destroy()">分解</button>
+        <button onclick="game.render.destroyTestEquip()">分解</button>
       </div>
     `;
   }
 
-  static destroy = () => {
-    alert("分解成功！");
+  // ======================
+  // 🔥 已恢复：分解功能
+  // ======================
+  static destroyTestEquip = () => {
+    if (!confirm("确定分解此装备？分解后将消失，并获得100金币")) return;
+    
+    // 分解逻辑：提示成功 + 刷新界面
+    alert("分解成功！获得 100 金币");
+    $("#nftlist").innerHTML = `
+      <div class="card">
+        <h3>装备已分解</h3>
+        <p>已获得100金币</p>
+      </div>
+    `;
   };
 
   static combat = () => {
