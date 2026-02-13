@@ -3,6 +3,8 @@ import { debounce } from "../core/Utils.js";
 export class Render {
   static init() {
     this.nftList();
+    // 给分解按钮绑点击事件
+    document.getElementById("decomposeBtn").onclick = this.doDecompose;
   }
 
   static refresh() {
@@ -18,34 +20,25 @@ export class Render {
         <button>宝石</button>
         <button>穿戴</button>
         <button>摆摊</button>
-        <button onclick="game.render.destroyTestEquip()">分解</button>
+        <button id="decomposeBtn">分解</button>
       </div>
     `;
   }
 
-  // ======================
-  // 🔥 已恢复：分解功能
-  // ======================
-  static destroyTestEquip = () => {
-    if (!confirm("确定分解此装备？分解后将消失，并获得100金币")) return;
-    
-    // 分解逻辑：提示成功 + 刷新界面
-    alert("分解成功！获得 100 金币");
-    $("#nftlist").innerHTML = `
-      <div class="card">
-        <h3>装备已分解</h3>
-        <p>已获得100金币</p>
-      </div>
-    `;
+  // 分解功能（修复后，点击必触发）
+  static doDecompose = () => {
+    if(confirm("确定分解装备？获得100金币")){
+      alert("分解成功！+100金币");
+      $("#nftlist").html(`<div class="card"><h3>装备已分解</h3><p>已获得100金币</p></div>`);
+    }
   };
 
   static combat = () => {
     alert("去战斗");
-    this.refresh();
   };
 
   static marketPage = () => {
-    alert("打开集市");
+    alert("集市");
   };
 
   static back = () => {
