@@ -10,14 +10,10 @@ body{background:#0b0b16;color:#e0e0e0;padding:20px;font-family:sans-serif}
 .back{padding:10px 20px;background:#223;color:#00f0ff;border:1px solid #00f0ff;border-radius:8px;cursor:pointer}
 .panel{background:#121225;border:1px solid #445;border-radius:12px;padding:20px;margin:16px 0}
 .panel p{margin:10px 0}
-.panel span{color:#00f0ff;font-weight:bold}
 .bar{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:20px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
-.card{background:#121225;border:2px solid #445;border-radius:12px;padding:16px}
-button{padding:8px 12px;border-radius:6px;background:#223;color:#00f0ff;border:1px solid #00f0ff;cursor:pointer}
-.orange{background:#ff8000;color:#000;border:0}
-.empty{text-align:center;color:#888;margin:40px 0}
-.slot{border:1px solid #445;padding:10px;margin:8px 0;border-radius:8px}
+.card{background:#121225;border:2px solid #445;border-radius:12px;padding:16px;margin:8px}
+button{padding:8px 12px;border-radius:6px;background:#223;color:#00f0ff;border:1px solid #00f0ff;cursor:pointer;margin:4px}
 #fileInput{display:none}
 </style>
 
@@ -26,27 +22,36 @@ button{padding:8px 12px;border-radius:6px;background:#223;color:#00f0ff;border:1
     <div class="page">
       <div class="title">暗黑割草战神</div>
       <div class="bar">
-        <button id="btn_connect">🔗 绑定钱包</button>
-        <button id="btn_fight">⚔️ 去战斗</button>
-        <button id="btn_market">🛒 集市</button>
-        <button id="btn_save" class="orange">💾 存档</button>
+        <button>🔗 绑定钱包</button>
+        <button>⚔️ 去战斗</button>
+        <button>🛒 集市</button>
+        <button>💾 存档</button>
       </div>
       <div class="panel">
-        <p>攻击：<span id="atk">150</span></p>
-        <p>防御：<span id="def">80</span></p>
-        <p>生命：<span id="hp">1500</span></p>
-        <p>暴击：<span id="crit">5</span>%</p>
-        <p>金币：<span id="gold">1000</span></p>
-        <p>钻石：<span id="diamond">100</span></p>
+        <p>攻击：150</p>
+        <p>防御：80</p>
+        <p>生命：1500</p>
+        <p>暴击：5%</p>
+        <p>金币：1000</p>
+        <p>钻石：100</p>
       </div>
+
+      <!-- 🔥 这里直接纯HTML写死5个按钮，完全不用JS！ -->
       <div id="nftlist" class="grid">
-        <div class="empty">点击【去战斗】开始玩</div>
+        <div class="card">
+          <h3>纯HTML测试装备</h3>
+          <p>攻100 防50</p>
+          <button>强化</button>
+          <button>宝石</button>
+          <button>穿戴</button>
+          <button>摆摊</button>
+          <button>分解</button>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
 
-<input type="file" id="fileInput" accept=".txt">
-
-<!-- 关键：去掉 type="module"，Vercel 100%加载 -->
-<script src="/app.js"></script>
+<!-- 暂时屏蔽JS，排除所有干扰 -->
+<!-- <script type="module" src="/app.js"></script> -->
