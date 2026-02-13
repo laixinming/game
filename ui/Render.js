@@ -14,24 +14,25 @@ import { combat } from "../core/Combat.js";
 import { getQualityColor, debounce } from "../core/Utils.js";
 
 export class Render {
-  static init(){
+
+  static init() {
     this.all();
     this.bind();
   }
 
-  static all(){
+  static all() {
     this.info();
     this.nftList();
   }
 
-  static refresh(){
+  static refresh() {
     this.info();
     this.nftList();
   }
 
-  static info(){
-    const acc=web3eth.account||"local_guest";
-    const a=player.totalAttr(acc);
+  static info() {
+    const acc = web3eth.account || "local_guest";
+    const a = player.totalAttr(acc);
     $("#atk").text(Math.floor(a.atk));
     $("#def").text(Math.floor(a.def));
     $("#hp").text(Math.floor(a.hp));
@@ -40,74 +41,214 @@ export class Render {
     $("#diamond").text(diamond.get());
   }
 
-  static nftList(){
-    const acc=web3eth.account||"local_guest";
-    const list=erc721.byOwner(acc);
-    const p=player.data();
+  // ==============================
+  // 彻底修复：所有按钮必显示版本
+  // ==============================
+  static nftList() {
+    const acc = web3eth.account || "local_guest";
+    const list = erc721.byOwner(acc);
+    const p = player.data();
 
-    let out = "";
-    if(list.length === 0){
-      out = '<p>点击【去战斗】获取装备</p>';
-    } else {
-      for(let i=0; i<list.length; i++){
-        let n = list[i];
-        let lv = enhance.level(n.tokenId);
-        let isOn = p.equip[n.type] == n.tokenId;
+    let html = '';
 
-        out += `
-<div class="card" style="border-color:${getQualityColor(n.quality)}">
-  <h3 style="color:${getQualityColor(n.quality)}">${n.name}+${lv}</h3>
-  <p>攻${n.atk} 防${n.def} 孔${n.gemSlots}</p>
-
-  <button onclick="game.render.enhance('${n.tokenId}',${n.maxEnhance})">强化</button>
-  <button onclick="game.render.gem('${n.tokenId}')">宝石</button>
-`;
-
-        if(isOn){
-          out += `<button onclick="game.render.unequip('${n.type}')">卸下</button>`;
-        }else{
-          out += `<button onclick="game.render.equip('${n.tokenId}')">穿戴</button>`;
-        }
-
-        out += `
-  <button onclick="game.render.sell('${n.tokenId}')">摆摊</button>
-  <button onclick="game.render.destroy('${n.tokenId}')">分解</button>
-</div>
-`;
-      }
+    if (list.length === 0) {
+      html = '<p>点击【去战斗】获取装备</p>';
+      $("#nftlist").innerHTML = html;
+      return;
     }
 
-    $("#nftlist").innerHTML = out;
+    for (let i = 0; i < list.length; i++) {
+      const n = list[i];
+      const lv = enhance.level(n.tokenId);
+      const equipped = p.equip[n.type] == n.tokenId;
+
+      // 纯字符串拼接，无任何语法风险
+      html += '<div class="card" style="border-color:' + getQualityColor(n.quality) + '">';
+      html += '<h3 style="color:' + getQualityColor(n.quality) + '">' + n.name + '+' + lv + '</h3>';
+      html += '<p>攻' + n.atk + ' 防' + n.def + ' 孔' + n.gemSlots + '</p>';
+
+      // 所有按钮 100% 同格式
+      html += '<button onclick="game.render.enhance(\'' + n.tokenId + '\',' + n.maxEnhance + ')">强化</button>';
+      html += '<button onclick="game.render.gem(\'' + n.tokenId + '\')">宝石</button>';
+
+      if (equipped) {
+        html += '<button onclick="game.render.unequip(\'' + n.type + '\')">卸下</button>';
+      } else {
+        html += '<button onclick="game.render.equip(\'' + n.tokenId + '\')">穿戴</button>';
+      }
+
+      html += '<button onclick="game.render.sell(\'' + n.tokenId + '\')">摆摊</button>';
+      html += '<button onclick="game.render.destroy(\'' + n.tokenId + '\')">分解</button>';
+
+      html += '</div>';
+    }
+
+    $("#nftlist").innerHTML = html;
   }
 
   static destroy = debounce((tokenId) => {
-    if(!confirm("确定分解此装备？返还100金币")) return;
+    if (!confirm("确定分解？返还100金币")) return;
     player.destroyEquip(tokenId);
-    alert("分解成功！");
+    alert("分解成功");
     Render.refresh();
   });
 
-  static combat=debounce(()=>{
-    const h=Config.maps.map(m=>`
-<div class="card">
-  <h3>${m.name}</h3>
-  <button onclick="game.render.fight(${m.id})">挑战</button>
-</div>
-`).join("");
+  static combat = debounce(() => {
+    let h = '';
+    Config.maps.forEach(m => {
+      h += '<div class="card"><h3>' + m.name + '</h3>';
+      h += '<button onclick="game.render.fight(' + m.id + ')">挑战</button></div>';
+    });
 
-    $("#main").innerHTML=`
-<div class="page">
-  <div class="title">选择地图</div>
-  <button class="back" onclick="game.render.back()">返回</button>
-  <div class="grid">${h}</div>
-</div>
-`;
+    $("#main").innerHTML = `
+    <div class="page">
+      <div class="title">选择地图</div>
+      <button class="back" onclick="game.render.back()">返回</button>
+      <div class="grid">${h}</div>
+    </div>`;
   });
 
-  static fight=debounce((id)=>{
-    const r=combat.fight(id);
-    alert(`获得：${r.equip.name}`);
+  static fight = debounce((id) => {
+    const r = combat.fight(id);
+    alert("获得：" + r.equip.name);
     Render.refresh();
+    Render.back();
+  });
+
+  static marketPage = debounce(() => {
+    let h = '';
+    market.getAllBooths().forEach(b => {
+      b.items.forEach(it => {
+        h += '<div class="card"><h4>' + it.name + '</h4><p>' + it.price + '钻</p>';
+        h += '<button onclick="game.render.buy(\'' + it.tid + '\')">购买</button></div>';
+      });
+    });
+
+    $("#main").innerHTML = `
+    <div class="page">
+      <div class="title">集市</div>
+      <button class="back" onclick="game.render.back()">返回</button>
+      <div class="grid">${h || '<p>暂无商品</p>'}</div>
+    </div>`;
+  });
+
+  static buy = debounce((tid) => {
+    const r = market.buyItem(tid, web3eth.account || "local_guest");
+    alert(r.msg);
+    Render.refresh();
+    Render.marketPage();
+  });
+
+  static enhance = debounce((tid, max) => {
+    $("#main").innerHTML = `
+    <div class="page">
+      <div class="title">强化</div>
+      <button class="back" onclick="game.render.back()">返回</button>
+      <div class="panel">
+        <p>等级+${enhance.level(tid)}</p>
+        <p>强化石：${bag.count("enhance_stone")}</p>
+        <button onclick="game.render.doEnhance('${tid}',${max})">强化</button>
+      </div>
+    </div>`;
+  });
+
+  static doEnhance = debounce((tid, max) => {
+    const r = enhance.upgradeByStone(tid, max);
+    alert(r.msg);
+    Render.refresh();
+    Render.back();
+  });
+
+  static equip = debounce((tid) => {
+    player.equip(tid);
+    Render.refresh();
+    Render.back();
+  });
+
+  static unequip = debounce((type) => {
+    player.unequip(type);
+    Render.refresh();
+    Render.back();
+  });
+
+  static sell = debounce((tid) => {
+    const p = prompt("售价(钻石)", "100");
+    if (!p || isNaN(p)) return;
+    const r = market.onShelf(tid, Number(p), web3eth.account || "local_guest");
+    alert(r.msg);
+    Render.refresh();
+  });
+
+  static gem = debounce((tid) => {
+    const n = erc721.all().find(x => x.tokenId == tid);
+    const s = gem.slots(tid);
+    let h = '';
+    for (let i = 0; i < n.gemSlots; i++) {
+      const g = s[i];
+      const name = g ? (bag.getGem(g)?.name || "宝石") : "空";
+      if (g) {
+        h += '<div class="slot"><p>孔' + (i + 1) + '：' + name + '</p>';
+        h += '<button onclick="game.render.take(\'' + tid + '\',' + i + ')">取下</button></div>';
+      } else {
+        h += '<div class="slot"><p>孔' + (i + 1) + '：' + name + '</p>';
+        h += '<button onclick="game.render.choose(\'' + tid + '\',' + i + ')">镶嵌</button></div>';
+      }
+    }
+
+    $("#main").innerHTML = `
+    <div class="page">
+      <div class="title">宝石</div>
+      <button class="back" onclick="game.render.back()">返回</button>
+      <div class="panel">${h}</div>
+    </div>`;
+  });
+
+  static choose = debounce((tid, i) => {
+    const list = bag.getAllGems();
+    if (!list.length) { alert("无宝石"); return; }
+    const id = prompt("宝石ID：\n" + list.map(g => g.id).join(","));
+    if (!id) return;
+    const r = gem.embed(tid, i, id);
+    alert(r.msg);
+    Render.refresh();
+    Render.gem(tid);
+  });
+
+  static take = debounce((tid, i) => {
+    const r = gem.take(tid, i);
+    alert(r.msg);
+    Render.refresh();
+    Render.gem(tid);
+  });
+
+  static back() {
+    $("#main").innerHTML = $("#home_html").innerHTML;
+    Render.refresh();
+  }
+
+  static bind() {
+    $("#connect").addEventListener("click", async () => {
+      await web3eth.connect();
+      Render.refresh();
+    });
+
+    $("#save").addEventListener("click", debounce(async () => {
+      const o = prompt("1=导出 2=导入", "1");
+      if (o == "1") await save.export();
+      if (o == "2") $("#fileInput").click();
+    }));
+
+    $("#fileInput").onchange = (e) => {
+      const r = new FileReader();
+      r.onload = async (ev) => {
+        await save.importFromText(ev.target.result);
+      };
+      r.readAsText(e.target.files[0]);
+    };
+  }
+}
+
+window.$ = s => document.querySelector(s);
     Render.back();
   });
 
@@ -468,5 +609,6 @@ window.$=s=>document.querySelector(s);
 }
 
 window.$ = s => document.querySelector(s);
+
 
 
